@@ -1,4 +1,4 @@
-name: Build Real APK Offline
+name: Build APK Offline
 on: [push]
 jobs:
   build:
@@ -6,14 +6,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
+      - name: Build Android APK
+        uses: GearS3/cordova-build-action@v1
         with:
-          command: buildozer android debug
-          buildozer_version: master
-
+          platform: android
+          # Cela va créer un projet Cordova propre à la volée
+          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: FantaroMG-Offline-APK
-          path: bin/*.apk
+          path: ./**/*.apk
