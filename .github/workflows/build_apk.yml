@@ -1,25 +1,27 @@
-name: Final APK Build
+name: Build APK
 on: [push]
 jobs:
-  android-build:
+  make_apk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Install Cordova
+        run: npm install -g cordova
 
-      - name: Build with Bubblewrap
-        uses: bitovi/github-actions-storybook-to-pwabuilder@v1.0.1
-        with:
-          url: 'https://nomenadev.github.io/fmg/'
-          output_name: 'FantaroMG.apk'
+      - name: Setup Android Environment
+        uses: android-actions/setup-android@v3
 
-      - name: Upload Final APK
+      - name: Build APK
+        run: |
+          cordova create build com.nomena.fmg "Fantaro MG"
+          cd build
+          cordova platform add android
+          cp -r ../* www/
+          cordova build android --debug
+
+      - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
-          name: Mon-Jeu-APK
-          path: ./*.apk
+          name: Mon-Jeu-Offline
+          path: build/platforms/android/app/build/outputs/apk/debug/*.apk
