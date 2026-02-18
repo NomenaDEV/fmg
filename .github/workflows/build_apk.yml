@@ -1,4 +1,4 @@
-name: Build APK
+name: Build APK Offline
 on: [push]
 jobs:
   build:
@@ -6,13 +6,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Android APK
-        uses: jpadilla/android-apk-build-action@v1
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
         with:
-          build-command: ./gradlew assembleDebug # GitHub va essayer de deviner la structure
+          buildozer_version: master
+          command: buildozer android debug
+          repository_root: .
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: FantaroMG-Offline
-          path: ./**/*.apk
+          name: FantaroMG-Offline-Package
+          path: bin/*.apk
