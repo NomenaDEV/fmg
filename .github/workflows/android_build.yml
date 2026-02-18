@@ -1,0 +1,24 @@
+name: Build APK Offline
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Android APK
+        uses: finmavis/buildozer-action@v1.1.0
+        with:
+          python-version: 3.11
+          # On définit les paramètres essentiels ici
+          buildozer-config: |
+            [app]
+            title = Fantaro MG
+            package.name = fantaromg
+            package.domain = com.nomenadev
+            source.dir = .
+            source.include_exts = py,png,jpg,kv,atlas,html,js,css,wav,mp3,otf
+            version = 0.1
+            orientation = portrait
+            fullscreen = 1
+            android.archs = arm64-v8a, armeabi-v7a
