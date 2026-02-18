@@ -1,16 +1,20 @@
-name: Create APK File
+name: Build Real APK
 on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build Android APK
-        uses: un some-package/build-action@v2 # Un exemple de compilateur léger
+
+      - name: Buildozer Action
+        uses: ArtemSBulgakov/buildozer-action@v1
         with:
-          args: --app-name "Fantaro MG" --package "com.nomena.fmg"
-      - name: Upload APK
+          buildozer_version: master
+          command: buildozer android debug
+          repository_root: .
+
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: FantaroMG-Offline-Installation
-          path: ./*.apk
+          name: FantaroMG-Offline
+          path: bin/*.apk
